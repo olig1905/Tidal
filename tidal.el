@@ -184,8 +184,10 @@
   (tidal-send-string ":}")
   )
 
-(defvar status-table (make-hash-table)) 
+(defvar status-table (make-hash-table))
+
 (dotimes (i 9) (puthash (concat "d" (number-to-string (+ 1 i))) nil status-table))
+
 (defun tidal-switch-dirtStream (in) 
   "Switch dirt stream on or off based on status independent of other commands" 
   (let ((status (gethash in status-table))) 

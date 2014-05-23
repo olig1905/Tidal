@@ -159,20 +159,16 @@
    )
   )
 
-(defun tidal-run-dirtStream (in)
+(defvar status-table (make-hash-table)) 
+(dotimes (i 9) (puthash (concat "d" (number-to-string (+ 1 i))) nil status-table))
 
-   "Send the first instance of in to the interpreter as a single line."
-  (interactive)
-  (goto-char 0)
-  (tidal-run-next-dirtStream in)
-  )
- 
  (defun tidal-run-next-dirtStream (in)
 
    "Send the next (after cursor) instance of in to the interpreter as a single line. This can be used if you have a file setup in a sequence."
   (interactive)
   (search-forward in nil nil 1)
   (tidal-run-multiple-lines)
+  (puthash in 1 status-table)
   )
 
 
@@ -182,17 +178,27 @@
   (tidal-send-string ":{")
   (tidal-send-string (concat " mapM_ ($ silence) [" in "]"))
   (tidal-send-string ":}")
+  (puthash in nil status-table)
   )
 
-(defvar status-table (make-hash-table)) 
-(dotimes (i 9) (puthash (concat "d" (number-to-string (+ 1 i))) nil status-table))
+(defun tidal-run-dirtStream (in)
+
+   "Send the first instance of in to the interpreter as a single line."
+  (interactive)
+  (goto-char 0)
+  (tidal-run-next-dirtStream in)
+  )
+
+
 (defun tidal-switch-dirtStream (in) 
   "Switch dirt stream on or off based on status independent of other commands" 
   (let ((status (gethash in status-table))) 
     (if status 
       (tidal-stop-dirtStream in) 
-      (tidal-run-dirtStream in)) 
-    (puthash in (not status) status-table)))
+      (tidal-run-dirtStream in)
+      )
+    )
+  )
 
 
 (defun tidal-run-region ()

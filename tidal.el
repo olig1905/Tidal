@@ -164,11 +164,16 @@
    "Send the first instance of in to the interpreter as a single line."
   (interactive)
   (goto-char 0)
+  (tidal-run-next-dirtStream in)
+  )
+ 
+ (defun tidal-run-next-dirtStream (in)
+
+   "Send the next (after cursor) instance of in to the interpreter as a single line. This can be used if you have a file setup in a sequence."
+  (interactive)
   (search-forward in nil nil 1)
   (tidal-run-multiple-lines)
   )
- 
- 
 
 
 (defun tidal-stop-dirtStream (in)
@@ -238,7 +243,16 @@
   (define-key map [?\C-v ?\C-6] (lambda () (interactive) (tidal-stop-dirtStream "d6")))
   (define-key map [?\C-v ?\C-7] (lambda () (interactive) (tidal-stop-dirtStream "d7")))
   (define-key map [?\C-v ?\C-8] (lambda () (interactive) (tidal-stop-dirtStream "d8")))
-  (define-key map [?\C-v ?\C-9] (lambda () (interactive) (tidal-stop-dirtStream "d9"))))
+  (define-key map [?\C-v ?\C-9] (lambda () (interactive) (tidal-stop-dirtStream "d9")))
+  (define-key map [?\C-n ?\C-1] (lambda () (interactive) (tidal-run-next-dirtStream "d1")))
+  (define-key map [?\C-n ?\C-2] (lambda () (interactive) (tidal-run-next-dirtStream "d2")))
+  (define-key map [?\C-n ?\C-3] (lambda () (interactive) (tidal-run-next-dirtStream "d3")))
+  (define-key map [?\C-n ?\C-4] (lambda () (interactive) (tidal-run-next-dirtStream "d4")))
+  (define-key map [?\C-n ?\C-5] (lambda () (interactive) (tidal-run-next-dirtStream "d5")))
+  (define-key map [?\C-n ?\C-6] (lambda () (interactive) (tidal-run-next-dirtStream "d6")))
+  (define-key map [?\C-n ?\C-7] (lambda () (interactive) (tidal-run-next-dirtStream "d7")))
+  (define-key map [?\C-n ?\C-8] (lambda () (interactive) (tidal-run-next-dirtStream "d8")))
+  (define-key map [?\C-n ?\C-9] (lambda () (interactive) (tidal-run-next-dirtStream "d9"))))
 
   
 (defun turn-on-tidal-keybindings ()
@@ -320,8 +334,8 @@
   (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.ltidal$" . literate-tidal-mode))
-;(add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/") ;required by olig1905 on linux
-;(require 'haskell-mode) ;required by olig1905 on linux
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/") ;required by olig1905 on linux
+(require 'haskell-mode) ;required by olig1905 on linux
 (define-derived-mode
   tidal-mode
   haskell-mode

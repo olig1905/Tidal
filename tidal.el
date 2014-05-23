@@ -184,6 +184,17 @@
   (tidal-send-string ":}")
   )
 
+(defvar status-table (make-hash-table)) 
+(dotimes (i 9) (puthash (concat "d" (number-to-string (+ 1 i))) nil status-table))
+(defun tidal-switch-dirtStream (in) 
+  "Switch dirt stream on or off based on status independent of other commands" 
+  (let ((status (gethash in status-table))) 
+    (if status 
+      (tidal-stop-dirtStream in) 
+      (tidal-run-dirtStream in)) 
+    (puthash in (not status) status-table)))
+
+
 (defun tidal-run-region ()
   "Place the region in a do block and compile."
   (interactive)
@@ -252,7 +263,16 @@
   (define-key map [?\C-n ?\C-6] (lambda () (interactive) (tidal-run-next-dirtStream "d6")))
   (define-key map [?\C-n ?\C-7] (lambda () (interactive) (tidal-run-next-dirtStream "d7")))
   (define-key map [?\C-n ?\C-8] (lambda () (interactive) (tidal-run-next-dirtStream "d8")))
-  (define-key map [?\C-n ?\C-9] (lambda () (interactive) (tidal-run-next-dirtStream "d9"))))
+  (define-key map [?\C-n ?\C-9] (lambda () (interactive) (tidal-run-next-dirtStream "d9")))
+  (define-key map [?\C-b ?\C-1] (lambda () (interactive) (tidal-switch-dirtStream "d1")))
+  (define-key map [?\C-b ?\C-2] (lambda () (interactive) (tidal-switch-dirtStream "d2")))
+  (define-key map [?\C-b ?\C-3] (lambda () (interactive) (tidal-switch-dirtStream "d3")))
+  (define-key map [?\C-b ?\C-4] (lambda () (interactive) (tidal-switch-dirtStream "d4")))
+  (define-key map [?\C-b ?\C-5] (lambda () (interactive) (tidal-switch-dirtStream "d5")))
+  (define-key map [?\C-b ?\C-6] (lambda () (interactive) (tidal-switch-dirtStream "d6")))
+  (define-key map [?\C-b ?\C-7] (lambda () (interactive) (tidal-switch-dirtStream "d7")))
+  (define-key map [?\C-b ?\C-8] (lambda () (interactive) (tidal-switch-dirtStream "d8")))
+  (define-key map [?\C-b ?\C-9] (lambda () (interactive) (tidal-switch-dirtStream "d9"))))
 
   
 (defun turn-on-tidal-keybindings ()
@@ -284,7 +304,25 @@
   (local-set-key [?\C-v ?\C-6] (lambda () (interactive) (tidal-stop-dirtStream "d6")))
   (local-set-key [?\C-v ?\C-7] (lambda () (interactive) (tidal-stop-dirtStream "d7")))
   (local-set-key [?\C-v ?\C-8] (lambda () (interactive) (tidal-stop-dirtStream "d8")))
-  (local-set-key [?\C-v ?\C-9] (lambda () (interactive) (tidal-stop-dirtStream "d9"))))
+  (local-set-key [?\C-v ?\C-9] (lambda () (interactive) (tidal-stop-dirtStream "d9")))
+  (local-set-key [?\C-n ?\C-1] (lambda () (interactive) (tidal-run-next-dirtStream "d1")))
+  (local-set-key [?\C-n ?\C-2] (lambda () (interactive) (tidal-run-next-dirtStream "d2")))
+  (local-set-key [?\C-n ?\C-3] (lambda () (interactive) (tidal-run-next-dirtStream "d3")))
+  (local-set-key [?\C-n ?\C-4] (lambda () (interactive) (tidal-run-next-dirtStream "d4")))
+  (local-set-key [?\C-n ?\C-5] (lambda () (interactive) (tidal-run-next-dirtStream "d5")))
+  (local-set-key [?\C-n ?\C-6] (lambda () (interactive) (tidal-run-next-dirtStream "d6")))
+  (local-set-key [?\C-n ?\C-7] (lambda () (interactive) (tidal-run-next-dirtStream "d7")))
+  (local-set-key [?\C-n ?\C-8] (lambda () (interactive) (tidal-run-next-dirtStream "d8")))
+  (local-set-key [?\C-n ?\C-9] (lambda () (interactive) (tidal-run-next-dirtStream "d9")))
+  (local-set-key [?\C-b ?\C-1] (lambda () (interactive) (tidal-switch-dirtStream "d1")))
+  (local-set-key [?\C-b ?\C-2] (lambda () (interactive) (tidal-switch-dirtStream "d2")))
+  (local-set-key [?\C-b ?\C-3] (lambda () (interactive) (tidal-switch-dirtStream "d3")))
+  (local-set-key [?\C-b ?\C-4] (lambda () (interactive) (tidal-switch-dirtStream "d4")))
+  (local-set-key [?\C-b ?\C-5] (lambda () (interactive) (tidal-switch-dirtStream "d5")))
+  (local-set-key [?\C-b ?\C-6] (lambda () (interactive) (tidal-switch-dirtStream "d6")))
+  (local-set-key [?\C-b ?\C-7] (lambda () (interactive) (tidal-switch-dirtStream "d7")))
+  (local-set-key [?\C-b ?\C-8] (lambda () (interactive) (tidal-switch-dirtStream "d8")))
+  (local-set-key [?\C-b ?\C-9] (lambda () (interactive) (tidal-switch-dirtStream "d9"))))
 
 
 
@@ -334,8 +372,8 @@
   (turn-on-font-lock))
 
 (add-to-list 'auto-mode-alist '("\\.ltidal$" . literate-tidal-mode))
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/") ;required by olig1905 on linux
-(require 'haskell-mode) ;required by olig1905 on linux
+;(add-to-list 'load-path "/usr/share/emacs/site-lisp/haskell-mode/") ;required by olig1905 on linux
+;(require 'haskell-mode) ;required by olig1905 on linux
 (define-derived-mode
   tidal-mode
   haskell-mode
